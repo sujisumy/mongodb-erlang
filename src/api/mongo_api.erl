@@ -26,13 +26,14 @@
   ensure_index/3,
   disconnect/1]).
 
--spec connect(atom(), list(), proplists:proplist(), proplists:proplist()) -> {ok, pid()}.
-connect(Type, Hosts, TopologyOptions, WorkerOptions) ->
-  mongoc:connect({Type, Hosts}, TopologyOptions, WorkerOptions).
-
 -spec connect(atom(), binary(), list(), proplists:proplist(), proplists:proplist()) -> {ok, pid()}.
 connect(Type, Name, Hosts, TopologyOptions, WorkerOptions) ->
-  mongoc:connect({Type, Name, Hosts}, TopologyOptions, WorkerOptions).
+ case Type of
+      single ->
+        mongoc:connect({Type, Hosts}, TopologyOptions, WorkerOptions);
+      rs ->
+        mongoc:connect({Type, Name, Hosts}, TopologyOptions, WorkerOptions)
+  end.
 
 -spec insert(atom() | pid(), collection(), list() | map() | bson:document()) ->
   {{boolean(), map()}, list()}.
