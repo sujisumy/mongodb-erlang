@@ -15,7 +15,6 @@
 
 %% API
 -export([
-  connect/4,
   connect/5,
   insert/3,
   find/4, find/6,
